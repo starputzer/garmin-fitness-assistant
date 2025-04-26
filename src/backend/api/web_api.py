@@ -15,7 +15,7 @@ import pandas as pd
 from src.backend.parsers.garmin_parser import GarminParser
 from src.backend.analysis.run_analyzer import RunAnalyzer
 from src.backend.llm.training_advisor import LLMTrainingAdvisor
-from src.backend.common.data_repository import GarminDataRepository
+from src.common.data_repository import GarminDataRepository
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.append(str(project_root))
