@@ -49,3 +49,8 @@ logs/
 # OS specific
 .DS_Store
 Thumbs.db
+node_modules/
+src/frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/npm-debug.log*
