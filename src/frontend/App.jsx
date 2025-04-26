@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 
