@@ -1,34 +1,33 @@
-// src/frontend/App.jsx
+// src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import DashboardPage from './pages/DashboardPage';
-import UploadPage from './pages/UploadPage';
-import AnalysisPage from './pages/AnalysisPage';
-import TrainingPlanPage from './pages/TrainingPlanPage';
-import RecommendationsPage from './pages/RecommendationsPage';
-import { DataProvider } from './context/DataContext';
-import { UserProvider } from './context/UserContext';
-import './App.css';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+
+// Einfache Komponenten für den Start
+const Layout = () => (
+  <div>
+    <h1>Garmin Fitness Assistant</h1>
+    <Outlet />
+  </div>
+);
+
+const Home = () => <div>Willkommen zur Garmin Fitness Assistant App</div>;
+
+// Router für React Router 7
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />
+      }
+    ]
+  }
+]);
 
 function App() {
-  return (
-    <UserProvider>
-      <DataProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<DashboardPage />} />
-              <Route path="upload" element={<UploadPage />} />
-              <Route path="analysis" element={<AnalysisPage />} />
-              <Route path="training-plan" element={<TrainingPlanPage />} />
-              <Route path="recommendations" element={<RecommendationsPage />} />
-            </Route>
-          </Routes>
-        </Router>
-      </DataProvider>
-    </UserProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
