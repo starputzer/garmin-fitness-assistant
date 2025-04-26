@@ -1,11 +1,30 @@
-fastapi==0.99.0
-uvicorn==0.23.0
-pandas==2.0.3
-numpy==1.24.4
-matplotlib==3.7.2
-plotly==5.15.0
-pydantic==1.10.12
-python-multipart==0.0.6
+# API und Web Framework
+fastapi==0.109.2
+uvicorn==0.27.1
+pydantic==2.6.1
+python-multipart==0.0.9
+python-dotenv==1.0.1
+aiofiles==23.2.1
+
+# Datenverarbeitung und Analyse
+pandas==2.2.0
+numpy==1.26.3
+matplotlib==3.8.2
+plotly==5.18.0
+scikit-learn==1.4.0
+
+# Webservice Requests
 requests==2.31.0
-python-dotenv==1.0.0
-aiofiles==23.1.0
+httpx==0.27.0
+
+# Für Async-Operationen
+asyncio==3.4.3
+jinja2==3.1.3
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.4
+
+# Dokumentation
+sphinx==7.2.6
+sphinx-rtd-theme==2.0.0

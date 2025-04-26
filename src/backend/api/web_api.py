@@ -6,6 +6,8 @@ import uvicorn
 import json
 import tempfile
 import os
+import sys
+from pathlib import Path
 import shutil
 from datetime import datetime, timedelta
 import pandas as pd
@@ -15,6 +17,8 @@ from src.backend.analysis.run_analyzer import RunAnalyzer
 from src.backend.llm.training_advisor import LLMTrainingAdvisor
 from src.backend.common.data_repository import GarminDataRepository
 
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.append(str(project_root))
 
 class WebAPI:
     def __init__(self, host, port, parser, analyzer, advisor, repository):
