@@ -9,7 +9,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from src.backend.parsers.garmin_parser import GarminParser
 from src.backend.analysis.run_analyzer import RunAnalyzer
-from src.backend.common.data_repository import GarminDataRepository
+from src.common.data_repository import GarminDataRepository
 
 
 def parse_args():
