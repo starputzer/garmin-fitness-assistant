@@ -55,3 +55,5 @@ frontend/build/
 frontend/.env
 frontend/npm-debug.log*
 .cleanup_backup/
+.structure_backup/
+.project_backup/

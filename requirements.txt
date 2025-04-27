@@ -17,6 +17,9 @@ scikit-learn==1.4.0
 requests==2.31.0
 httpx==0.27.0
 
+# Garmin Connect Integration
+garminconnect==0.2.12
+
 # Für Async-Operationen
 asyncio==3.4.3
 jinja2==3.1.3
