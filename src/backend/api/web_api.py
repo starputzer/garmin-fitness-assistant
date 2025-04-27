@@ -16,9 +16,7 @@ from src.backend.parsers.garmin_parser import GarminParser
 from src.backend.analysis.run_analyzer import RunAnalyzer
 from src.backend.llm.training_advisor import LLMTrainingAdvisor
 from src.common.data_repository import GarminDataRepository
-from backend.llm.advisor_factory import get_training_advisor
 
-advisor = get_training_advisor(model_name=args.model_name, model_endpoint=args.model_endpoint)
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.append(str(project_root))
 

@@ -2,8 +2,6 @@ import requests
 import json
 import pandas as pd
 import numpy as np
-import platform
-import os
 from datetime import datetime, timedelta
 
 
@@ -16,17 +14,8 @@ class LLMTrainingAdvisor:
             model_name (str): Name of the LLM model to use.
             model_endpoint (str): URL of the model API endpoint.
         """
-        # Überprüfen, ob wir im Mock-Modus laufen sollen
-        self.use_mock = platform.system() == "Windows" or os.environ.get("USE_MOCK_LLM", "0") == "1"
-        
-        if self.use_mock:
-            print(f"INFO: Verwende Mock-LLM-Implementierung (Mock-Modus: {platform.system()})")
-            self.model_name = "mock-model"
-            self.model_endpoint = "mock-endpoint"
-        else:
-            self.model_name = model_name
-            self.model_endpoint = model_endpoint
-            
+        self.model_name = model_name
+        self.model_endpoint = model_endpoint
         self.race_predictions = None
         self.training_history = None
         self.activities = None
@@ -275,33 +264,17 @@ class LLMTrainingAdvisor:
     
     def _call_llm_api(self, prompt):
         """
-        Call the LLM API with a prompt, or provide mock responses on Windows.
+        Call the LLM API with a prompt.
         
         Args:
             prompt (str): Prompt for the LLM.
             
         Returns:
-            str: Response from the LLM or mock response.
+            str: Response from the LLM.
         """
-        # Mock-Modus: Generiere plausible Antworten ohne externe API
-        if self.use_mock:
-            # Extrahiere Schlüsselwörter aus dem Prompt für angepasste Mock-Antworten
-            keywords = {
-                "training plan": self._generate_mock_training_plan(prompt),
-                "workouts": self._generate_mock_workouts(prompt),
-                "progress": self._generate_mock_progress_analysis(prompt),
-                "recovery": self._generate_mock_recovery_recommendation(prompt)
-            }
-            
-            # Wähle die passende Mock-Antwort basierend auf Schlüsselwörtern im Prompt
-            for key, response in keywords.items():
-                if key in prompt.lower():
-                    return response
-            
-            # Generische Antwort, wenn keine spezifischen Schlüsselwörter gefunden wurden
-            return "This is a generic mock response for development purposes."
+        # This is a placeholder implementation
+        # The actual implementation would depend on the specific LLM API being used
         
-        # Echter API-Aufruf für Produktionsumgebungen
         # For local OLLAMA
         if "ollama" in self.model_endpoint:
             try:
@@ -315,127 +288,11 @@ class LLMTrainingAdvisor:
                 return response.json().get("response", "")
             except Exception as e:
                 print(f"Error calling OLLAMA API: {e}")
-                # Auch im Produktionsmodus einen Fallback anbieten
-                return "LLM API error - please check your connection and try again."
+                # For development/testing, return a placeholder response
+                return "This is a placeholder response for development purposes."
         else:
             # Generic API handler, would need to be adapted for specific APIs
             return "LLM API not implemented for this endpoint."
-    
-    def _generate_mock_training_plan(self, prompt):
-        """Generate a realistic mock training plan"""
-        # Extrahiere Informationen aus dem Prompt
-        goal_info = ""
-        if "5K" in prompt:
-            goal_info = "5K race"
-        elif "10K" in prompt:
-            goal_info = "10K race"
-        elif "Half" in prompt:
-            goal_info = "Half Marathon"
-        elif "Marathon" in prompt:
-            goal_info = "Marathon"
-        
-        return f"""# 8-Week Training Plan for {goal_info}
-
-## Week 1: Foundation
-- Monday: Rest day
-- Tuesday: Easy run, 30 minutes at conversational pace
-- Wednesday: Rest or cross-training
-- Thursday: Interval training, 5x400m with 200m recovery jogs
-- Saturday: Long run, 45 minutes at easy pace
-
-## Week 2: Building
-- Monday: Rest day
-- Tuesday: Easy run, 35 minutes at conversational pace
-- Wednesday: Rest or cross-training
-- Thursday: Tempo run, 20 minutes at comfortably hard pace
-- Saturday: Long run, 50 minutes at easy pace
-
-## Week 3-8: [Additional structured training content]
-
-This training plan progressively builds endurance and speed while including adequate recovery periods. Adjust based on your current fitness level and how you're feeling.
-"""
-    
-    def _generate_mock_workouts(self, prompt):
-        """Generate mock workout suggestions"""
-        return """Here are three workout suggestions based on your current fitness level:
-
-1. **Fartlek Workout**
-   - Duration: 40 minutes
-   - Intensity: Varied
-   - Description: After a 10-minute warm-up, alternate between 2 minutes at tempo pace and 1 minute easy recovery. Repeat 8 times, then cool down for 10 minutes.
-   - Benefits: Improves lactate threshold and mental toughness
-
-2. **Hill Repeats**
-   - Duration: 45 minutes
-   - Intensity: High
-   - Description: Find a moderate hill (4-6% grade) that takes about 30-60 seconds to climb. After a 10-minute warm-up, run hard uphill, then jog or walk back down. Repeat 8-10 times.
-   - Benefits: Builds power, strength, and running economy
-
-3. **Progressive Long Run**
-   - Duration: 75 minutes
-   - Intensity: Easy to moderate
-   - Description: Start at an easy pace for 45 minutes, then gradually increase pace for the final 30 minutes, finishing at your half marathon pace.
-   - Benefits: Teaches your body to perform while fatigued, improves endurance
-"""
-    
-    def _generate_mock_progress_analysis(self, prompt):
-        """Generate a mock progress analysis"""
-        return """## Progress Analysis (Last 4 Weeks)
-
-Your training data shows consistent improvement over the past month:
-
-### Strengths:
-- Your 5K predicted time has improved by approximately 2.5%
-- Training consistency has been excellent with 85% adherence to planned workouts
-- Aerobic endurance shows significant gains based on long run performance
-
-### Areas for Improvement:
-- Recovery patterns indicate potential insufficient rest between hard sessions
-- Speed work appears to be less consistent than endurance training
-- Consider adding more variety in workout types
-
-### Recommendations:
-1. Continue the current volume but ensure at least two complete rest days per week
-2. Incorporate more structured interval sessions to improve speed
-3. Consider adding strength training twice weekly to prevent injury and improve running economy
-
-Overall, your training trajectory is positive with good adaptations occurring. Minor adjustments to recovery and workout variety should lead to continued improvement.
-"""
-    
-    def _generate_mock_recovery_recommendation(self, prompt):
-        """Generate mock recovery recommendations"""
-        return """## Recovery Recommendations
-
-Based on your recent training patterns, here are personalized recovery recommendations:
-
-### Current Status Assessment:
-- Training load has been moderately high over the past 10 days
-- Recent high-intensity sessions may require additional recovery
-- Some early warning signs of potential fatigue are present
-
-### Recovery Recommendations:
-1. **Immediate Actions:**
-   - Schedule 1-2 complete rest days this week
-   - Reduce intensity for the next 3-4 days
-   - Focus on sleep quality (aim for 7-9 hours)
-
-2. **Recovery Techniques:**
-   - Implement 10-15 minutes of daily foam rolling
-   - Consider contrast therapy (alternating hot and cold)
-   - Gentle yoga or stretching on rest days
-
-3. **Nutrition Focus:**
-   - Increase protein intake slightly (1.6-1.8g/kg body weight)
-   - Ensure adequate carbohydrate replenishment after workouts
-   - Consider tart cherry juice to reduce inflammation
-
-### Warning Signs to Monitor:
-- Resting heart rate elevated by more than 7 bpm
-- Persistent muscle soreness lasting >72 hours
-- Declining performance despite feeling high effort
-
-Implement these recovery strategies to maintain training consistency and prevent overtraining.
-"""
     
     def _parse_training_plan(self, response, weeks, sessions_per_week):
         """
